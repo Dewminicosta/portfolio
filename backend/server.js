@@ -18,7 +18,7 @@ const app = express();
 
 // Middlewares
 app.use(cors({
-  origin: '*', // Set to specific frontend origin in production
+  origin: ['https://portfolio-frontend-sd9e.onrender.com', 'http://localhost:5173'],
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
