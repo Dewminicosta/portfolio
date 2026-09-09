@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Inbox } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 
-const Navbar = ({ theme, toggleTheme, toggleAdminInbox, messageCount }) => {
+const Navbar = ({ theme, toggleTheme, toggleAdminInbox, messageCount, showInbox = true }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -115,57 +115,59 @@ const Navbar = ({ theme, toggleTheme, toggleAdminInbox, messageCount }) => {
         transition={{ duration: 0.5, delay: 0.3 }}
         style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
       >
-        {/* Inbox Button */}
-        <motion.button
-          onClick={toggleAdminInbox}
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3, delay: 0.4 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          style={{
-            position: 'relative',
-            padding: '8px',
-            borderRadius: '50%',
-            width: '38px',
-            height: '38px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            border: '1.5px solid var(--border-color)',
-            background: 'transparent',
-            cursor: 'pointer',
-            transition: 'var(--transition-smooth)'
-          }}
-          title="Open Messages Inbox"
-        >
-          <Inbox size={18} style={{ color: 'var(--text-primary)' }} />
-          {messageCount > 0 && (
-            <motion.span
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.3, delay: 0.5, type: "spring" }}
-              style={{
-                position: 'absolute',
-                top: '-4px',
-                right: '-4px',
-                background: 'var(--accent-secondary)',
-                color: '#ffffff',
-                fontSize: '10px',
-                fontWeight: 700,
-                borderRadius: '50%',
-                width: '16px',
-                height: '16px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-              }}
-            >
-              {messageCount}
-            </motion.span>
-          )}
-        </motion.button>
+        {/* Inbox Button - Only show if showInbox is true */}
+        {showInbox && (
+          <motion.button
+            onClick={toggleAdminInbox}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3, delay: 0.4 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            style={{
+              position: 'relative',
+              padding: '8px',
+              borderRadius: '50%',
+              width: '38px',
+              height: '38px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              border: '1.5px solid var(--border-color)',
+              background: 'transparent',
+              cursor: 'pointer',
+              transition: 'var(--transition-smooth)'
+            }}
+            title="Open Messages Inbox"
+          >
+            <Inbox size={18} style={{ color: 'var(--text-primary)' }} />
+            {messageCount > 0 && (
+              <motion.span
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.3, delay: 0.5, type: "spring" }}
+                style={{
+                  position: 'absolute',
+                  top: '-4px',
+                  right: '-4px',
+                  background: 'var(--accent-secondary)',
+                  color: '#ffffff',
+                  fontSize: '10px',
+                  fontWeight: 700,
+                  borderRadius: '50%',
+                  width: '16px',
+                  height: '16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+                }}
+              >
+                {messageCount}
+              </motion.span>
+            )}
+          </motion.button>
+        )}
 
         {/* Theme Toggle */}
         <motion.div

@@ -9,7 +9,6 @@ import Experience from './sections/Experience';
 import Projects from './sections/Projects';
 import Contact from './sections/Contact';
 import Footer from './components/Footer';
-import AdminInbox from './components/AdminInbox';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import api from './lib/axios';
@@ -17,7 +16,6 @@ import api from './lib/axios';
 function App() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
   const [messages, setMessages] = useState([]);
-  const [isAdminInboxOpen, setIsAdminInboxOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const location = useLocation();
 
@@ -35,7 +33,7 @@ function App() {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
-  // Fetch messages from DB
+  // Fetch messages from DB (only for dashboard)
   const fetchMessages = async () => {
     try {
       const response = await api.get('/contact/messages');
@@ -48,8 +46,10 @@ function App() {
   };
 
   useEffect(() => {
-    fetchMessages();
-  }, []);
+    if (isAuthenticated) {
+      fetchMessages();
+    }
+  }, [isAuthenticated]);
 
   // Update status (mark read/unread)
   const handleUpdateStatus = async (id, newStatus) => {
@@ -76,8 +76,6 @@ function App() {
       console.error('Failed to delete message:', error.message);
     }
   };
-
-  const unreadCount = messages.filter((m) => m.status === 'unread').length;
 
   const handleLogin = () => {
     setIsAuthenticated(true);
@@ -111,8 +109,7 @@ function App() {
             <Navbar
               theme={theme}
               toggleTheme={toggleTheme}
-              toggleAdminInbox={() => setIsAdminInboxOpen(!isAdminInboxOpen)}
-              messageCount={unreadCount}
+              showInbox={false}
             />
             <main style={{ flexGrow: 1 }}>
               <Hero />
@@ -120,17 +117,9 @@ function App() {
               <Skills />
               <Experience />
               <Projects />
-              <Contact onMessageSent={fetchMessages} />
+              <Contact />
             </main>
             <Footer />
-            <AdminInbox
-              isOpen={isAdminInboxOpen}
-              onClose={() => setIsAdminInboxOpen(false)}
-              messages={messages}
-              onRefresh={fetchMessages}
-              onDelete={handleDeleteMessage}
-              onUpdateStatus={handleUpdateStatus}
-            />
           </>
         } />
         <Route path="*" element={<Navigate to="/" replace />} />
