@@ -17,8 +17,14 @@ services:
   - type: web
     name: portfolio-frontend
     env: static
-    buildCommand: cd frontend && npm install && npm run build
-    publishPath: frontend/dist
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    publishPath: dist
     envVars:
       - key: VITE_API_URL
-        value: https://portfolio-backend.onrender.com
+        value: https://portfolio-backend.onrender.com/api
+    headers:
+      - source: /**
+        headers:
+          - key: Cache-Control
+            value: no-cache
